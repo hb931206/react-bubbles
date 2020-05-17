@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+
 import { useParams } from "react-router-dom";
 import { axiosWithAuth } from "../util/axiosWithAuth";
 
@@ -8,8 +8,9 @@ const initialColor = {
   code: { hex: "" },
 };
 
-const ColorList = ({ colors, updateColors, getColorList }) => {
+const ColorList = ({ colors, getColorList }) => {
   const { id } = useParams();
+  console.log("ID: ", id);
 
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
@@ -20,14 +21,14 @@ const ColorList = ({ colors, updateColors, getColorList }) => {
     setColorToEdit(color);
   };
 
-  const saveEdit = (e) => {
+  const saveEdit = (e, id) => {
     e.preventDefault();
     // Make a put request to save your updated color
     // think about where will you get the id from...
     // where is is saved right now?
 
     axiosWithAuth()
-      .put(`/colors/${id}`, initialColor)
+      .put(`/colors/${id}`, colors)
       .then((res) => {
         console.log("Put Res ", res);
         getColorList();
@@ -38,7 +39,7 @@ const ColorList = ({ colors, updateColors, getColorList }) => {
   const deleteColor = (color) => {
     // make a delete request to delete this color
     axiosWithAuth()
-      .delete(`/colors/${id}`)
+      .delete(`/colors/${color.id}`)
       .then((res) => {
         console.log("Delete Res is ", res);
         getColorList(color);
