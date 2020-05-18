@@ -9,26 +9,27 @@ const initialColor = {
 };
 
 const ColorList = ({ colors, getColorList }) => {
-  const { id } = useParams();
-  console.log("ID: ", id);
-
   const [editing, setEditing] = useState(false);
-  const [colorToEdit, setColorToEdit] = useState(initialColor);
-  console.log("colors", colors);
+  const [colorToEdit, setColorToEdit] = useState(colors);
+  console.log("colors", colorToEdit);
 
   const editColor = (color) => {
     setEditing(true);
     setColorToEdit(color);
   };
 
-  const saveEdit = (e, id) => {
+  const saveEdit = (e, color) => {
     e.preventDefault();
     // Make a put request to save your updated color
     // think about where will you get the id from...
     // where is is saved right now?
 
+    // const colortoUpdate = colors.find(color=>{
+    // return`${color.id}`=== props.match.params.id;
+    // })
+
     axiosWithAuth()
-      .put(`/colors/${id}`, colors)
+      .put(`/colors/${colorToEdit.id}`, colorToEdit)
       .then((res) => {
         console.log("Put Res ", res);
         getColorList();
@@ -42,7 +43,7 @@ const ColorList = ({ colors, getColorList }) => {
       .delete(`/colors/${color.id}`)
       .then((res) => {
         console.log("Delete Res is ", res);
-        getColorList(color);
+        getColorList();
       })
       .catch((err) => console.log(err.response));
   };
